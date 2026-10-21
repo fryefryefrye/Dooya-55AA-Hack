@@ -61,6 +61,11 @@ protocol — verify with a logic analyser or a serial sniffer before trusting it
 Hang a small ESP8266 right on the motor's RJ11 plug — the motor's own 3.3 V
 rail drives it directly, no separate supply needed. **Cross TX and RX.**
 
+<img src="img/pcb.png" width="35%" alt="Minimal carrier PCB: ESP8266 module and RJ11 socket"/>
+
+*A minimal carrier PCB for exactly this: an ESP8266 module and an RJ11 socket,
+hanging right on the motor cable.*
+
 | Motor signal | MCU pin (example) | Notes |
 | :--- | :--- | :--- |
 | motor RX | **TX** (D7 / GPIO13) | MCU transmits, motor receives |
