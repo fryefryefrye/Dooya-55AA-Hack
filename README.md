@@ -17,11 +17,18 @@ Dooya (杜亚) motor kits ship with a small protocol translator in the box, e.g.
 different voice assistants, different radios — but the motor itself is a single
 SKU that always speaks the same language. The RS485 adapter here is just the
 example this repo was built from: on its outside it speaks RS485 with the
-standard Dooya `55 FE FE` protocol, and on the inside it silently repackages
+**Dooya Unified Serial Protocol (杜亚统一串口协议)** — the official, publicly
+documented `55 FE FE` framing — and on the inside it silently repackages
 everything into a private `55 AA` TTL frame before handing it to the motor.
 
+<img src="img/motor.jpg" width="25%" alt="A Dooya motor, its 6-pin cable and the official RS485 adapter"/>
+
+*A `DVQ24WN` motor with its 6-pin cable and the official RS485 adapter — one of
+the many translator variants the same motor ships with.*
+
 The practical consequence: wire a microcontroller straight to the motor's 6-pin
-cable, send standard `55 FE FE` frames, and the motor **ignores you completely**.
+cable, send official Unified Serial Protocol (`55 FE FE`) frames, and the
+motor **ignores you completely**.
 No error, no reply.
 
 This repository documents that private protocol end to end — frame layout,
@@ -54,9 +61,6 @@ protocol — verify with a logic analyser or a serial sniffer before trusting it
 Hang a small ESP8266 right on the motor's RJ11 plug — the motor's own 3.3 V
 rail drives it directly, no separate supply needed. **Cross TX and RX.**
 
-![The motor, its 6-pin cable and the official RS485 adapter](img/motor.jpg)
-*The motor (here a `DVQ24WN`), its 6-pin cable and the official RS485 adapter.*
-
 | Motor signal | MCU pin (example) | Notes |
 | :--- | :--- | :--- |
 | motor RX | **TX** (D7 / GPIO13) | MCU transmits, motor receives |
@@ -66,10 +70,10 @@ rail drives it directly, no separate supply needed. **Cross TX and RX.**
 | KEY UP | leave open | short to GND to trigger up |
 | KEY DOWN | leave open | short to GND to trigger down |
 
-Pinout of the plug (wire colours are labelled in the image):
+Pinout of the adapter's RJ11 socket (the motor's plug mates with it):
 
-![6-pin plug pinout](img/rj11.png)
-*From left: `KEY_DOWN`, `KEY_UP`, `3.3 V` out, `GND`, `RXO` (motor RX), `TXO` (motor TX).*
+![Pinout of the adapter's RJ11 socket](img/rj11.png)
+*From left: `KEY_DOWN`, `KEY_UP`, `3.3 V` out, `GND`, `RXO`, `TXO`.*
 
 The two KEY wires are the fallback: if your unit turns out to speak a different
 dialect, shorting them to GND still moves the blind, which makes them a usable
