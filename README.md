@@ -17,9 +17,10 @@ Dooya (杜亚) motor kits ship with a small protocol translator in the box, e.g.
 different voice assistants, different radios — but the motor itself is a single
 SKU that always speaks the same language. The RS485 adapter here is just the
 example this repo was built from: on its outside it speaks RS485 with the
-**Dooya Unified Serial Protocol (杜亚统一串口协议)** — the official, publicly
-documented `55 FE FE` framing — and on the inside it silently repackages
-everything into a private `55 AA` TTL frame before handing it to the motor.
+**Dooya Unified Serial Protocol (杜亚统一串口协议)** — officially published and
+publicly documented: a `55` start byte, then a two-byte device address (default
+`FE FE`) — and on the inside it silently repackages everything into a private
+`55 AA` TTL frame before handing it to the motor.
 
 <img src="img/motor.jpg" width="25%" alt="A Dooya motor, its 6-pin cable and the official RS485 adapter"/>
 
@@ -27,9 +28,8 @@ everything into a private `55 AA` TTL frame before handing it to the motor.
 the many translator variants the same motor ships with.*
 
 The practical consequence: wire a microcontroller straight to the motor's 6-pin
-cable, send official Unified Serial Protocol (`55 FE FE`) frames, and the
-motor **ignores you completely**.
-No error, no reply.
+cable, send official Unified Serial Protocol frames, and the motor **ignores
+you completely**. No error, no reply.
 
 This repository documents that private protocol end to end — frame layout,
 the CRC-16 that is easy to get wrong, control commands, position polling and
@@ -303,9 +303,9 @@ motor TX, `D7` = motor RX.
 
 **[`examples/dooya_485_controller/`](examples/dooya_485_controller/)** — the
 officially documented **Dooya Unified Serial Protocol (杜亚统一串口协议)** on
-RS485 (`55 FE FE` frames), for motors that expose a 485 interface directly —
-open-close curtain and roller blind models commonly do. Same console and
-polling design, through an RS485 transceiver on `D6` / `D7`.
+RS485, for motors that expose a 485 interface directly — open-close curtain and
+roller blind models commonly do. Same console and polling design, through an
+RS485 transceiver on `D6` / `D7`.
 
 Each folder's own README has the wiring, the command reference, a sample
 session and the configuration macros.
@@ -318,7 +318,7 @@ README.zh-CN.md    Chinese version
 crc/               reference CRC-16 implementation (C and Python) + self test
 examples/
    dooya_55aa_controller/   ESP8266 sketch: the private 55 AA TTL protocol
-   dooya_485_controller/    ESP8266 sketch: the official 55 FE FE RS485 protocol
+   dooya_485_controller/    ESP8266 sketch: the official protocol over RS485
 ```
 
 ## 11. License and Disclaimer

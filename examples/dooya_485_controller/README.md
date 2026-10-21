@@ -51,8 +51,9 @@ Serial monitor at **115200**, one command per line:
 * Polls the position every second (`POLL_INTERVAL_MS`) while idle — the motor
   never reports on its own on this protocol.
 * Skips one poll right after a command (`POLL_HOLDOFF_MS`).
-* Decodes the read reply: `55 FE FE 01 01 <percent> .. ..`; percent `0xFF`
-  means the stroke has not been set and the motor refuses percentage commands.
+* Decodes the read reply: `55 <addr_L> <addr_H> 01 01 <percent> .. ..`; percent
+  `0xFF` means the stroke has not been set and the motor refuses percentage
+  commands. The sample output below uses the factory-default address `FE FE`.
 * Prints a state line **only on a transition**: opening / closing is inferred
   from the position trend, and the state becomes stopped after
   `STATE_SETTLE_MS` without movement.
@@ -116,9 +117,11 @@ All at the top of the sketch:
 * Frame: `55 | ID_L ID_H | function | data... | CRC_L CRC_H`. The function
   byte's high nibble selects the channel (`0xF` = all channels, control only);
   the low nibble is the command (read / write / control).
-* `FE FE` is the factory-default single-device address. On a bus with several
-  motors, change each motor's address first — a frame to `FE FE` reaches every
-  unmodified motor, and `00 00` is broadcast (never answered).
+* The two bytes after `55` are the device address, low byte first. `FE FE` is
+  the factory-default single-device address, not part of the frame format; on a
+  bus with several motors, change each motor's address first — a frame to
+  `FE FE` reaches every unmodified motor, and `00 00` is broadcast (never
+  answered).
 * CRC is CRC-16/MODBUS (poly `0x8005` reflected, init `0xFFFF`), **low byte
   first** — see the main README and [`crc/`](../../crc/).
 * Official reference: Dooya《对外接口通用485协议》总则及分册（开合帘 / 百叶帘及卷帘）.
@@ -153,11 +156,13 @@ D6(GPIO12) → RO，D7(GPIO13) → DI，3.3V/GND → VCC/GND。若用 DE/RE 型�
 `q` 立即查位置、`d` 切换十六进制报文打印、`?` 帮助。
 
 **自动行为**：空闲时每秒查一次位置（该协议电机不会主动上报）；发完命令后停一次轮询；
-解析读应答 `55 FE FE 01 01 <百分比>`，百分比 `0xFF` 表示未设行程（电机不执行百分比命令）；
+解析读应答 `55 <地址_L> <地址_H> 01 01 <百分比>`（下文示例输出用的是出厂默认地址
+`FE FE`），百分比 `0xFF` 表示未设行程（电机不执行百分比命令）；
 **只在状态变化时**打印一行状态，方向按位置趋势推断，`STATE_SETTLE_MS` 无位移判停。
 
 **协议要点**：帧 `55 | ID_L ID_H | 功能码 | 数据 | CRC_L CRC_H`；功能码高 4 位选通道
-（`0xF` 群发，仅控制命令有效），低 4 位是命令类型；`FE FE` 是出厂默认单机地址，
-多机共总先改地址，`00 00` 是广播（不应答）；CRC 为 CRC-16/MODBUS（poly `0x8005`
+（`0xF` 群发，仅控制命令有效），低 4 位是命令类型；`55` 之后的两字节是设备地址
+（低字节在前），`FE FE` 只是**出厂默认的单机地址**、不属于帧格式的一部分，多机共总
+先改地址，`00 00` 是广播（不应答）；CRC 为 CRC-16/MODBUS（poly `0x8005`
 反射、初值 `0xFFFF`），**低字节在前**——细节见主 README 与 [`crc/`](../../crc/)。
 官方参考：杜亚《对外接口通用485协议》总则及分册。

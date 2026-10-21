@@ -15,9 +15,10 @@
 //   function high nibble = channel (0x0..0xE selects one, 0xF = all channels,
 //                          group control, only valid for control commands)
 //   function low nibble  = command (0x01 read / 0x02 write / 0x03 control)
-//   FE FE = factory-default single-device address; 00 00 = broadcast (a
-//           broadcasted frame is never answered). Two motors on one bus must
-//           be given different addresses first.
+//   ID_L ID_H = device address, low byte first. FE FE is only the
+//                          factory-default single-device address, not part of
+//                          the format; 00 00 = broadcast (never answered).
+//                          Two motors on one bus need different addresses.
 //   CRC-16/MODBUS (poly 0x8005, reflected, init 0xFFFF), low byte first,
 //   covering from the start byte to the last data byte.
 //
@@ -28,6 +29,7 @@
 //   set position 55 FE FE 03 04 <percent> .. ..
 //   read         55 FE FE 01 02 01 85 42
 //   reply        55 FE FE 01 01 <percent> .. ..   (percent 0xFF = stroke not set)
+//   The frames above use the factory-default address FE FE.
 //
 // Wiring: ESP8266 -> RS485 transceiver (MAX485 class, auto-direction) -> motor A/B.
 //   D6 (GPIO12) = transceiver RO (MCU RX)
@@ -247,7 +249,7 @@ static void HandleFrame(const uint8_t *pBuf, uint8_t len)
 		return;
 	}
 
-	// Read reply: 55 | FE FE | 01 | 01 | percent | CRC_L CRC_H
+	// Read reply: 55 | ID_L ID_H | 01 | 01 | percent | CRC_L CRC_H  (default FE FE)
 	if (pBuf[3] != 0x01 || pBuf[4] != 0x01)
 	{
 		Serial.printf("       -> not a read reply (function 0x%02X), dropped\n", pBuf[3]);
