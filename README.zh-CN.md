@@ -250,21 +250,20 @@ ESP8266 / ESP32 驱动电机。
 
 ## 9. 示例代码
 
-[`examples/dooya_55aa_controller/`](examples/dooya_55aa_controller/README.md) 下是一个自包含的
-Arduino 工程（ESP8266），普通 `.ino` 放在目录根，可直接用 Arduino IDE 打开，也可用 PlatformIO 编译。
+两个自包含的 Arduino 工程（ESP8266），转换模块两侧各一个。都是普通 `.ino` 放在目录根，
+可直接用 Arduino IDE 打开，也可用 PlatformIO 编译。
 
-全部功能都在这一个工程里：
+**[`examples/dooya_55aa_controller/`](examples/dooya_55aa_controller/README.md)** ——
+本仓库主题的私有 `55 AA` TTL 协议，适合电机经由转换模块接出的情况。串口命令
+（`o` / `c` / `s` / `p50` / `q`）、空闲每秒查位置、解析应答与主动上报、按 `d` 开关
+十六进制报文打印。引脚即第 3 节的 `D6` = 电机 TX、`D7` = 电机 RX。
 
-| 功能 | 做法 |
-| :--- | :--- |
-| 控制指令 | 串口控制台：`o` 开、`c` 关、`s` 停、`p50` 设位置、`q` 查位置 |
-| 位置轮询 | 空闲时每秒查一次，随时知道当前百分比 |
-| 应答与上报 | 先校验（起始对、长度、CRC），再解析出位置与状态 |
-| 状态判断 | 有上报就用状态字节，没有就按位置趋势推断 |
-| 报文打印 | 收发的每一帧都打十六进制，运行时按 `d` 开关 |
+**[`examples/dooya_485_controller/`](examples/dooya_485_controller/README.md)** ——
+官方公开发布的**杜亚统一串口协议**（RS485 上的 `55 FE FE` 帧），适合电机**直接提供
+485 接口**的情况——开合帘、卷帘型号常见。同样的命令台与轮询设计，经 RS485 收发器
+接 `D6` / `D7`。
 
-引脚约定与第 3 节一致（`D6` = 电机 TX、`D7` = 电机 RX、9600 8N1），接线表照旧适用。
-命令表、示例输出和可调参数见该目录自己的 README。
+每个目录自己的 README 里有接线、命令表、输出示例和可调参数。
 
 ## 10. 仓库结构
 
@@ -273,7 +272,8 @@ README.md          英文版（主）
 README.zh-CN.md    本文件
 crc/               CRC-16 参考实现（C 与 Python）+ 自测
 examples/
-   dooya_55aa_controller/   一个 ESP8266 工程，包含上面全部功能
+   dooya_55aa_controller/   ESP8266 工程：私有 55 AA TTL 协议
+   dooya_485_controller/    ESP8266 工程：官方 55 FE FE RS485 协议
 ```
 
 ## 11. 许可与声明

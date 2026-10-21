@@ -290,24 +290,25 @@ time with a 6 ms gap.
 
 ## 9. Example Code
 
-One self-contained Arduino sketch (ESP8266) lives in
-[`examples/dooya_55aa_controller/`](examples/dooya_55aa_controller/). It is a
-plain Arduino project (`.ino` in the folder root) that opens directly in the
-Arduino IDE and also builds with PlatformIO.
+Two self-contained Arduino sketches (ESP8266), one per side of the translator.
+Both are plain Arduino projects (`.ino` in the folder root) that open directly
+in the Arduino IDE and also build with PlatformIO.
 
-Everything is in that single sketch:
+**[`examples/dooya_55aa_controller/`](examples/dooya_55aa_controller/)** — the
+private `55 AA` TTL protocol documented in this repository, for motors that
+reach the world through a translator. Serial console commands (`o` / `c` / `s`
+/ `p50` / `q`), one query per second while idle, decoded replies and unsolicited
+status reports, hex dump toggled at runtime with `d`. Pins: section 3's `D6` =
+motor TX, `D7` = motor RX.
 
-| Feature | How |
-| :--- | :--- |
-| Commands | serial console: `o` open, `c` close, `s` stop, `p50` set position, `q` query |
-| Position polling | one query per second while idle, so the percentage is always known |
-| Replies and reports | validated (start pair, length, CRC), decoded into position and state |
-| State | the report's status byte when available, position trend otherwise |
-| Hex dump | every frame on the wire, toggled at runtime with `d` |
+**[`examples/dooya_485_controller/`](examples/dooya_485_controller/)** — the
+officially documented **Dooya Unified Serial Protocol (杜亚统一串口协议)** on
+RS485 (`55 FE FE` frames), for motors that expose a 485 interface directly —
+open-close curtain and roller blind models commonly do. Same console and
+polling design, through an RS485 transceiver on `D6` / `D7`.
 
-The pin convention is the one from section 3 (`D6` = motor TX, `D7` = motor RX,
-9600 8N1), and the wiring table applies unchanged. The example's own README has
-the command reference, a sample session and the configuration macros.
+Each folder's own README has the wiring, the command reference, a sample
+session and the configuration macros.
 
 ## 10. Repository Layout
 
@@ -316,7 +317,8 @@ README.md          this file (English)
 README.zh-CN.md    Chinese version
 crc/               reference CRC-16 implementation (C and Python) + self test
 examples/
-   dooya_55aa_controller/   one ESP8266 sketch with all the features above
+   dooya_55aa_controller/   ESP8266 sketch: the private 55 AA TTL protocol
+   dooya_485_controller/    ESP8266 sketch: the official 55 FE FE RS485 protocol
 ```
 
 ## 11. License and Disclaimer
