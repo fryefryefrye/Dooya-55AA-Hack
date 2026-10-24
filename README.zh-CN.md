@@ -17,7 +17,7 @@ ESP8266 / ESP32 驱动电机。
 帧格式：`55` 起始字节 + 两字节设备地址，出厂默认 `FE FE`）；但在内部，它把协议
 **悄悄翻译**成私有的 `55 AA` TTL 短帧丢给电机。
 
-<img src="img/motor.jpg" width="25%" alt="电机、6P 线缆与官方 485 转换模块"/>
+<img src="img/motor.jpg" width="50%" alt="电机、6P 线缆与官方 485 转换模块"/>
 
 *`DVQ24WN` 电机、6P 线缆与官方 RS485 转换模块——同一台电机配过的众多转换模块变种之一。*
 
@@ -54,7 +54,7 @@ ESP8266 / ESP32 驱动电机。
 
 *为这个用法做的极简载板 PCB：一块 ESP8266 模块加一个 RJ11 插座，直接挂在电机线缆上。*
 
-<img src="img/assembled-board.jpg" width="35%" alt="焊接组装完成的载板"/>
+<img src="img/assembled-board.jpg" width="50%" alt="焊接组装完成的载板"/>
 
 *焊接组装完成的同一块载板：一共只有 4 个元器件——ESP-12F 模块、RJ11 插座和两颗阻容，
 与电机无损对插。*
@@ -76,7 +76,7 @@ ESP8266 / ESP32 驱动电机。
 两个按键线是退路：万一你的机型说的是别的方言，短接到 GND 仍然能把窗帘动起来，
 可以当作不要位置反馈时的备用方案。
 
-<img src="img/final-product.jpg" width="35%" alt="与电机对接好的成品"/>
+<img src="img/final-product.jpg" width="50%" alt="与电机对接好的成品"/>
 
 *与电机对接好的实际成品：控制器直接挂在电机自带的线缆上，由电机的 3.3V 供电。*
 

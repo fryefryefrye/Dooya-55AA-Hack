@@ -22,7 +22,7 @@ publicly documented: a `55` start byte, then a two-byte device address (default
 `FE FE`) — and on the inside it silently repackages everything into a private
 `55 AA` TTL frame before handing it to the motor.
 
-<img src="img/motor.jpg" width="25%" alt="A Dooya motor, its 6-pin cable and the official RS485 adapter"/>
+<img src="img/motor.jpg" width="50%" alt="A Dooya motor, its 6-pin cable and the official RS485 adapter"/>
 
 *A `DVQ24WN` motor with its 6-pin cable and the official RS485 adapter — one of
 the many translator variants the same motor ships with.*
@@ -66,7 +66,7 @@ rail drives it directly, no separate supply needed. **Cross TX and RX.**
 *A minimal carrier PCB for exactly this: an ESP8266 module and an RJ11 socket,
 hanging right on the motor cable.*
 
-<img src="img/assembled-board.jpg" width="35%" alt="The assembled carrier board"/>
+<img src="img/assembled-board.jpg" width="50%" alt="The assembled carrier board"/>
 
 *The same board assembled — only four components: an ESP-12F module, an RJ11
 socket and two passives. It plugs straight onto the motor's connector.*
@@ -89,7 +89,7 @@ The two KEY wires are the fallback: if your unit turns out to speak a different
 dialect, shorting them to GND still moves the blind, which makes them a usable
 plan B for a controller that does not need position feedback.
 
-<img src="img/final-product.jpg" width="35%" alt="The finished controller mated with the motor"/>
+<img src="img/final-product.jpg" width="50%" alt="The finished controller mated with the motor"/>
 
 *The finished unit mated with the motor: the controller hangs on the motor's own
 cable and runs off the motor's 3.3 V rail.*
