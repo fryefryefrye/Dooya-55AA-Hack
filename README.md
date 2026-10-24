@@ -66,6 +66,11 @@ rail drives it directly, no separate supply needed. **Cross TX and RX.**
 *A minimal carrier PCB for exactly this: an ESP8266 module and an RJ11 socket,
 hanging right on the motor cable.*
 
+<img src="img/assembled-board.jpg" width="35%" alt="The assembled carrier board"/>
+
+*The same board assembled — only four components: an ESP-12F module, an RJ11
+socket and two passives. It plugs straight onto the motor's connector.*
+
 | Motor signal | MCU pin (example) | Notes |
 | :--- | :--- | :--- |
 | motor RX | **TX** (D7 / GPIO13) | MCU transmits, motor receives |
@@ -83,6 +88,11 @@ Pinout of the adapter's RJ11 socket (the motor's plug mates with it):
 The two KEY wires are the fallback: if your unit turns out to speak a different
 dialect, shorting them to GND still moves the blind, which makes them a usable
 plan B for a controller that does not need position feedback.
+
+<img src="img/final-product.jpg" width="35%" alt="The finished controller mated with the motor"/>
+
+*The finished unit mated with the motor: the controller hangs on the motor's own
+cable and runs off the motor's 3.3 V rail.*
 
 ### 3.2 Serial parameters
 
